@@ -11,7 +11,6 @@ def get_page_or_404(name):
 	"""Return page content as a Django template ot raise 404 error."""
 	try:
 		file_path = safe_join(settings.SITE_PAGES_DIRECTORY, name)
-		print(file_path)
 	except ValueError:
 		raise Http404('Page Not Found')
 	else:
