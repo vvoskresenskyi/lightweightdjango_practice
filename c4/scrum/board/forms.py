@@ -26,7 +26,7 @@ class TaskFilter(django_filters.FilterSet):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.filters['assigned'].extra.update({'to_field_name': User.USERNAMA_FIELD})
+        self.filters['assigned'].extra.update({'to_field_name': User.USERNAME_FIELD})
 
 
 class SprintFilter(django_filters.FilterSet):

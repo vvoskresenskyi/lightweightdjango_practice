@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 
 from rest_framework import authentication, permissions, viewsets, filters
+from django_filters.rest_framework import DjangoFilterBackend
 
 from .forms import TaskFilter, SprintFilter
 from .models import Sprint, Task
@@ -23,7 +24,7 @@ class DefaultsMixin(object):
     paginate_by_param = 'page_size'
     max_paginate_by = 100
     filter_backends = (
-        #filters.DjangoFilterBackend,
+        DjangoFilterBackend,
         filters.SearchFilter,
         filters.OrderingFilter,
     )
