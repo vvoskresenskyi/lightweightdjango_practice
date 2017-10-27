@@ -7,6 +7,7 @@
         render: function () {
             var context = this.getContext(),
                 html = this.template(context);
+            console.log(context);
             this.$el.html(html);
         },
         getContext: function () {
@@ -101,7 +102,7 @@
                 end.setDate(end.getDate() - 7);
                 end = end.toISOString().replace(/T.*/g, '');
                 app.sprints.fetch({
-                    data: {end_min: end},
+                    /*data: {end_min: end},*/
                     success: $.proxy(self.render, self)
                 });
             });
@@ -118,7 +119,7 @@
             view.render();
             view.on('done', function () {
                 link.show();
-            })
+            });
         }
     });
 
@@ -163,11 +164,13 @@
             this.sprintId = options.sprintId;
             this.sprint = null;
             app.collections.ready.done(function () {
-                self.sprint = app.sprints.push({id: self.sprintId});
-                self.sprint.fetch({
-                    success: function () {
-                        self.render();
-                    }
+                app.sprints.getOrFetch(self.sprintId).done(function (sprint) {
+                    self.sprint = sprint;
+                    self.render();
+                }).fail(function (sprint) {
+                    self.sprint = sprint;
+                    self.sprint.invalid = true;
+                    self.render();
                 });
             });
         },

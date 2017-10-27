@@ -98,6 +98,24 @@
             this._previous = responce.previous;
             this._count = responce.count;
             return responce.results || [];
+        },
+        getOrFetch: function (id) {
+            var result = new $.Deferred(),
+                model = this.get('id');
+            if (!model) {
+                model = this.push({id: id});
+                model.fetch({
+                    success: function (model, response, options) {
+                        result.resolve(model);
+                    },
+                    error: function (model, response, options) {
+                        result.reject(model, response);
+                    }
+                });
+            } else {
+                result.resolve(model);
+            }
+            return result;
         }
     });
 
