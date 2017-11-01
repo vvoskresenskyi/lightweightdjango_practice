@@ -12,7 +12,6 @@
         <h2>Your Sprint</h2>
         <button class="add" type="submit">Add Sprint</button>
         <% if (sprints !== null) { %>
-        <% console.log(sprints); %>
             <div class="sprints">
                 <% _.each(sprints.models, function (sprint) { %>
                     <a href="#sprint/<%- sprint.get('id') %>" class="sprint">
@@ -85,6 +84,9 @@
             <button class="create" type="submit">Create</button>
             <button class="cancel" type="submit">Cancel</button>
         </form>
+    </script>
+    <script type="text/html" id="task-item-template">
+        <%- task.get('name') %>
     </script>
 </head>
 <body>
