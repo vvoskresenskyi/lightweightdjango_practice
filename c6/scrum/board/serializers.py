@@ -8,6 +8,7 @@ from rest_framework.reverse import reverse
 
 from .models import Sprint, Task
 
+
 User = get_user_model()
 
 
@@ -36,7 +37,8 @@ class SprintSerializer(serializers.ModelSerializer):
 
 class TaskSerializer(serializers.ModelSerializer):
     assigned = serializers.SlugRelatedField(
-        slug_field=User.USERNAME_FIELD, required=False, read_only=True)
+        slug_field=User.USERNAME_FIELD, required=False, allow_null=True,
+        queryset=User.objects.all())
     status_display = serializers.SerializerMethodField()
     links = serializers.SerializerMethodField()
 
@@ -56,10 +58,8 @@ class TaskSerializer(serializers.ModelSerializer):
             'assigned': None
         }
         if obj.sprint_id:
-            pass
             links['sprint'] = reverse('sprint-detail', kwargs={'pk': obj.sprint_id}, request=request)
         if obj.assigned:
-            pass
             links['assigned'] = reverse('user-detail', kwargs={User.USERNAME_FIELD: obj.assigned}, request=request)
         return links
 
@@ -75,10 +75,10 @@ class TaskSerializer(serializers.ModelSerializer):
         return value
 
     def validate(self, data):
-        sprint = data.get('sprint', None)
-        status = data.get('status', None)
-        started = data.get('started', None)
-        completed = data.get('completed', None)
+        sprint = data.get('sprint')
+        status = data.get('status', Task.STATUS_TODO)
+        started = data.get('started')
+        completed = data.get('completed')
         if not sprint and status != Task.STATUS_TODO:
             raise serializers.ValidationError(_('Backlog tasks must have "Not Started" status.'))
         if started and status == Task.STATUS_TODO:
@@ -104,5 +104,5 @@ class UserSerializer(serializers.ModelSerializer):
         username = obj.get_username()
         return {
             'self': reverse('user-detail', kwargs={User.USERNAME_FIELD: username}, request=request),
-            'tasks': '{}?assigned={}'.format(reverse('task-list', request=request), username),
+            'tasks': '{}?assigned={}'.format(reverse('task-list', request=request), username)
         }

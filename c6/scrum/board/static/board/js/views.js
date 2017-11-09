@@ -266,6 +266,9 @@
         tagName: 'div',
         className: 'task-item',
         templateName: '#task-item-template',
+        events: {
+            'click': 'details'
+        },
         initialize: function (options) {
             TemplateView.prototype.initialize.apply(this, arguments);
             this.task = options.task;
@@ -278,6 +281,15 @@
         render: function () {
             TemplateView.prototype.render.apply(this, arguments);
             this.$el.css('order', this.task.get('order'));
+        },
+        details: function () {
+            var view = new TaskDetailView({task: this.task});
+            this.$el.before(view.el);
+            this.$el.hide();
+            view.render();
+            view.on('done', function () {
+                this.$el.show();
+            }, this);
         }
     });
 
