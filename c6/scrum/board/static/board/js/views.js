@@ -77,7 +77,7 @@
                     wait: true,
                     success: $.proxy(self.success, self),
                     error: $.proxy(self.modelFailure, self)
-                })
+                });
             });
         },
         success: function (model) {
@@ -99,7 +99,7 @@
                 end.setDate(end.getDate() - 7);
                 end = end.toISOString().replace(/T.*/g, '');
                 app.sprints.fetch({
-                    /*data: {end_min: end},*/
+                    data: {end_min: end},
                     success: $.proxy(self.render, self)
                 });
             });
@@ -270,7 +270,7 @@
             TemplateView.prototype.initialize.apply(this, arguments);
             this.task = options.task;
             this.task.on('change', this.render, this);
-            this.task.on('remove', this.render, this);
+            this.task.on('remove', this.remove, this);
         },
         getContext: function () {
             return {task: this.task};

@@ -3,7 +3,7 @@ var app = (function ($) {
         app = JSON.parse(config.text());
 
     $(document).ready(function () {
-        var router  = new app.router();
+        var router = new app.router();
     });
 
     return app;

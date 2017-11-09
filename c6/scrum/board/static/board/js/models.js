@@ -24,13 +24,13 @@
 
     // Setup jQuery ajax calls to handle CSRF
     $.ajaxPrefilter(function (settings, originalOptions, xhr) {
-        var csrfToken;
+        var csrftoken;
         if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
             // Send the token to same-origin, relative URLs only.
             // Send the token only if the method warrants CSRF protection
             // Using the CSRFToken value acquired earlier
-            csrfToken = getCookie('csrfToken');
-            xhr.setRequestHeader('X-CSRFToken', csrfToken);
+            csrftoken = getCookie('csrftoken');
+            xhr.setRequestHeader('X-CSRFToken', csrftoken);
         }
     });
     
@@ -101,7 +101,7 @@
             if (!sprint) {
                 status = 'unassigned';
             } else {
-                status = ['todo', 'active', 'testing', 'done'][this.get('status') - 1]
+                status = ['todo', 'active', 'testing', 'done'][this.get('status') - 1];
             }
             return status;
         },
@@ -117,15 +117,15 @@
     });
 
     var BaseCollection = Backbone.Collection.extend({
-        parse: function (responce) {
-            this._next = responce.next;
-            this._previous = responce.previous;
-            this._count = responce.count;
-            return responce.results || [];
+        parse: function (response) {
+            this._next = response.next;
+            this._previous = response.previous;
+            this._count = response.count;
+            return response.results || [];
         },
         getOrFetch: function (id) {
             var result = new $.Deferred(),
-                model = this.get('id');
+                model = this.get(id);
             if (!model) {
                 model = this.push({id: id});
                 model.fetch({

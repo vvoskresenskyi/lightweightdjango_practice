@@ -24,13 +24,13 @@ class DefaultsMixin(object):
     paginate_by_param = 'page_size'
     max_paginate_by = 100
     filter_backends = (
-        DjangoFilterBackend,
+        #DjangoFilterBackend,
         filters.SearchFilter,
         filters.OrderingFilter,
     )
 
 
-class SprintViewSet(viewsets.ModelViewSet):
+class SprintViewSet(DefaultsMixin, viewsets.ModelViewSet):
     """API endpoint for listing and creating sprints."""
 
     queryset = Sprint.objects.order_by('end')
